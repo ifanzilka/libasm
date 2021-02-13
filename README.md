@@ -15,6 +15,25 @@ ssize_t		ft_write(int fd, void const *buf, size_t nbyte);
 ssize_t		ft_read(int fd, void *buf, size_t nbyte);
 char		*ft_strdup(char const *s1);
 ```
+
+
+BONUS PART
+```C
+typedef struct		s_list
+{
+	void			*data;
+	struct s_list	*next;
+}					t_list;
+
+int					ft_list_size(t_list *list);
+void				ft_list_push_front(t_list **list, void *data);
+void				ft_list_sort(t_list **list, int	(*cmp)());
+int					ft_atoi_base(char *str, char *base);
+void				ft_list_remove_if(t_list **list,\
+						void *data_ref, int (*cmp)(), void (*free_fnc)(void *));
+
+```
+
 ## Compile
 For compilation use in root directory.
 ```shell 
