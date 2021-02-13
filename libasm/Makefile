@@ -25,7 +25,7 @@ SRCS = $(addprefix $(DIR_SRCS), ft_putchar.s	ft_read.s	ft_strcpy.s	ft_strlen.s	f
 SRCS.O = $(addprefix $(OBJ_DIR),$(SRCS:.s=.o))
 
 
-BONUS_SRCS = $(addprefix $(DIR_SRCS_BONUS), ft_list_size.s  ft_list_push_front.s ft_atoi_base.s)
+BONUS_SRCS = $(addprefix $(DIR_SRCS_BONUS), ft_list_size.s  ft_list_push_front.s ft_atoi_base.s ft_list_remove_if.s  ft_list_sort.s)
 
 BONUS_SRCS.O = $(addprefix $(OBJ_DIR),$(BONUS_SRCS:.s=.o))
 
@@ -106,4 +106,3 @@ fclean: clean
 re: fclean all
 
 .PHONY: all clean fclean re
-#####$(AR) $(NAME) $(SRCS.O) $(BONUS_SRCS.O)

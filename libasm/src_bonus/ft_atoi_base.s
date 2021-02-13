@@ -20,6 +20,12 @@ _ft_atoi_base:
 						je		.return
 						cmp		BYTE [rsi + rcx], 10	; base[i] == \n
 						je		.return
+						cmp		BYTE [rsi + rcx], 11	; b[i] == \v
+						je		.return
+						cmp		BYTE [rsi + rcx], 12	; b[i] == \f
+						je		.return
+						cmp		BYTE [rsi + rcx], 13	; b[i] == \r
+						je		.return
 						cmp		BYTE [rsi + rcx], 45	; base[i] == '-'
 						je	 	.return
 						cmp		BYTE [rsi + rcx], 43	; base[i] == '+'
@@ -49,6 +55,12 @@ _ft_atoi_base:
 						cmp		BYTE [rdi + rcx], 9		; str[i] == \t
 						je		.space
 						cmp		BYTE [rdi + rcx], 10	; str[i] == \n
+						je		.space
+						cmp		BYTE [rdi + rcx], 11	; s[i] == \v
+                        je		.space
+						cmp		BYTE [rdi + rcx], 12	; s[i] == \f
+						je		.space
+						cmp		BYTE [rdi + rcx], 13	; s[i] == \r
                         je		.space
                         jmp		.issign
 .space:
@@ -67,7 +79,7 @@ _ft_atoi_base:
 .positive:				inc		rcx						; i++
 						jmp		.issign
 .zero_j:
-						xor 	rbx, rbx				; j == 0																	
+						xor 	rbx, rbx				; j == 0	
 .is_in_base:
 						cmp		BYTE [rdi + rcx], 0		; str[i] == \0
 						je		.return
