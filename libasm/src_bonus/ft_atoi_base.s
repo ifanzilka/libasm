@@ -53,12 +53,12 @@ ft_is_sign:
 ;------------------------------------------------------------------------------;
 
 ft_dup_char:
-	mov		r9b, byte[rsi]
+	mov		r9b, byte[rsi] ;rsi(base)
 	inc		rsi
 .looping:
-	cmp		byte [rsi], 0
+	cmp		byte [rsi], 0	;while (str)
 	je		.end_of_str
-	cmp		byte [rsi], r9b
+	cmp		byte [rsi], r9b	;base == base[i]
 	je		.dup_char
 	inc		rsi
 	jmp		.looping
@@ -74,29 +74,29 @@ ft_dup_char:
 ;------------------------------------------------------------------------------;
 
 ft_check_base:
-	cmp		byte[rdi], 0
+	cmp		byte[rdi], 0	; if (!base)
 	je		.b_error
-	call	_ft_strlen
-	cmp		rax, 1
+	call	_ft_strlen		
+	cmp		rax, 1		; len <= 1
 	jle		.b_error
-	push	rax
+	push	rax			; stack in len
 .loop_check_char:
-	cmp		byte [rdi], 0
+	cmp		byte [rdi], 0	
 	je		.end_of_base
-	call	ft_is_space
+	call	ft_is_space		; 1 -> space -1 -> not space
 	cmp		rax, 0
-	jg		.base_error
-	call	ft_is_sign
-	cmp		rax, 0
-	jne		.base_error
-	push	rsi
-	mov		rsi, rdi
-	call	ft_dup_char
+	jg		.base_error	;rax > 0
+	call	ft_is_sign	
+	cmp		rax, 0		
+	jne		.base_error	; rax != 0 1 -> plus -1 ->  minus 
+	push	rsi			;save base
+	mov		rsi, rdi	
+	call	ft_dup_char		;rax = 1(==) rax = 0 (!=)
 	pop		rsi
 	cmp		rax, 0
-	jg		.base_error
+	jg		.base_error	;rax > 0
 	inc		rdi
-	jmp		.loop_check_char
+	jmp		.loop_check_char 
 .end_of_base:
 	pop		rax
 	ret
@@ -115,13 +115,13 @@ ft_posit_base:
 	mov		cl, [rdi]
 .nextchar:
 	cmp		byte [rsi + rax], 0
-	jz		.not_base
+	jz		.not_base		;==
 	cmp		cl, [rsi + rax]
 	je		.posit
 	inc		rax
 	jmp		.nextchar
 .posit:
-	ret
+	ret					; ret number in base
 .not_base:
 	mov		rax, -1
 	ret
@@ -131,50 +131,50 @@ ft_posit_base:
 ;------------------------------------------------------------------------------;
 
 _ft_atoi_base:
-	cmp		rdi, 0
+	cmp		rdi, 0			;rdi -> str
 	je		.error
-	cmp		rsi, 0
+	cmp		rsi, 0			;rsi -> base
 	je		.error
 	push	rdi				; store str address
 	mov		rdi, rsi		; mov the base addr to the argument
-	call	ft_check_base	; check and return the base_len if it works
+	call	ft_check_base			; check and return the base_len if it works
 	mov		rbx, rax		; store base_len to some register
 	pop		rdi				; recover str address
-	cmp		rbx, 0			; if base_error, exit function
+	cmp		rbx, 0			; if base_error, exit function or len = 0
 	je		.error
-	dec		rdi
+	dec		rdi			;rdi--
 .while_is_space:
 	inc		rdi
 	call	ft_is_space
 	cmp		rax, 0
-	jg		.while_is_space
+	jg		.while_is_space		;rax > 0
 	mov		r9, 1
 	mov		rax, 1
 	dec		rdi
 .while_is_sign:
-	mul		r9
+	mul		r9			;result in rax
 	mov		r9, rax
-	inc		rdi
+	inc		rdi			;
 	call	ft_is_sign
 	cmp		rax, 0
-	jne		.while_is_sign
-	call	ft_posit_base	; return the posit of the char on the base string
+	jne		.while_is_sign	
+	call	ft_posit_base			; return the posit of the char on the base string
 	cmp		rax, 0			; check if (char) belongs to the base
 	jl		.error
 	inc		rdi;
 .loop_is_base:
-	push	rax;			; store posit
+	push	rax;				; store posit
 	call	ft_posit_base
 	mov		rcx, rax		; save new posit into other register
 	pop		rax				; recover posit
 	cmp		rcx, 0			; check if (char) belongs to the base
-	jl		.exit
+	jl		.exit			; rcx < 0
 	mul		rbx				; rax = rax * rbx, rbx is base_size
 	add		rax, rcx		; add the new posit
 	inc		rdi				; increment string  address
 	jmp		.loop_is_base
 .exit:
-	mul		r9
+	mul		r9			; rax * sign
 	ret
 .error:
 	mov		rax, 0
