@@ -11,17 +11,17 @@ extern		_ft_strlen
 ;------------------------------------------------------------------------------;
 
 ft_is_space:
-	cmp		byte [rdi], 0x09
+	cmp		byte [rdi], 0x09	; \t'
 	je		.is_space
-	cmp		byte [rdi], 0x0A
+	cmp		byte [rdi], 0x0A	;'\n'
 	je		.is_space
-	cmp		byte [rdi], 0x0B
+	cmp		byte [rdi], 0x0B	;'\v'
 	je		.is_space
-	cmp		byte [rdi], 0x0C
+	cmp		byte [rdi], 0x0C	;'\f'
 	je		.is_space
-	cmp		byte [rdi], 0x0D
+	cmp		byte [rdi], 0x0D	;'\r'
 	je		.is_space
-	cmp		byte [rdi], 0x20
+	cmp		byte [rdi], 0x20	;' ' SPACE
 	je		.is_space
 .is_not_space:
 	mov		rax, -1
@@ -35,9 +35,9 @@ ft_is_space:
 ;------------------------------------------------------------------------------;
 
 ft_is_sign:
-	cmp		byte [rdi], 0x2B
+	cmp		byte [rdi], 0x2B	; '+'
 	je		.is_plus
-	cmp		byte [rdi], 0x2D
+	cmp		byte [rdi], 0x2D	; '-'
 	je		.is_minus
 	mov		rax, 0
 	ret
