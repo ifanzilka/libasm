@@ -77,24 +77,24 @@ ft_check_base:
 	cmp		byte[rdi], 0	; if (!base)
 	je		.b_error
 	call	_ft_strlen		
-	cmp		rax, 1		; len <= 1
+	cmp		rax, 1			; len <= 1
 	jle		.b_error
-	push	rax			; stack in len
+	push	rax				; stack in len
 .loop_check_char:
 	cmp		byte [rdi], 0	
 	je		.end_of_base
 	call	ft_is_space		; 1 -> space -1 -> not space
 	cmp		rax, 0
-	jg		.base_error	;rax > 0
+	jg		.base_error		;rax > 0
 	call	ft_is_sign	
 	cmp		rax, 0		
-	jne		.base_error	; rax != 0 1 -> plus -1 ->  minus 
-	push	rsi			;save base
+	jne		.base_error		; rax != 0 1 -> plus -1 ->  minus 
+	push	rsi				;save base
 	mov		rsi, rdi	
 	call	ft_dup_char		;rax = 1(==) rax = 0 (!=)
 	pop		rsi
 	cmp		rax, 0
-	jg		.base_error	;rax > 0
+	jg		.base_error		;rax > 0
 	inc		rdi
 	jmp		.loop_check_char 
 .end_of_base:

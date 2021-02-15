@@ -7,20 +7,20 @@ global	_ft_list_remove_if
 ;       void (*free_fct)(void *))                                              ;
 ;------------------------------------------------------------------------------;
 
-_ft_list_remove_if:		; rdi = **list rsi = *data_ref rdx = *cmp rcx = *free_fnc
-						push	rsp
+_ft_list_remove_if:									; rdi = **list rsi = *data_ref rdx = *cmp rcx = *free_fnc
+						push	rsp					; pointer in stack
 						cmp		rdi, 0				; !**list
 						je		.return
-						cmp		qword [rdi], 0		; !*list
+						cmp		word[rdi], 0		; !*list	проверяем первые 2 байт (то есть лист)
 						je		.return
-						mov		r8, rdi				; r8 = **begin
-						mov		r9, [rdi]			; r9 = *list
+						mov		r8, rdi				; r8 = **begin  r8 64 bits registr
+						mov		r9, [rdi]			; r9 = *list 
 						xor		r10, r10			; r10 = *previous
 .loop:
 						cmp		r9, 0				; !*list
 						je		.return
 						mov		rdi, [r9]			; rdi = list->data
-						push	rdx
+						push	rdx	
 						push	rcx
 						push	rsi
 						push	r8
@@ -33,7 +33,7 @@ _ft_list_remove_if:		; rdi = **list rsi = *data_ref rdx = *cmp rcx = *free_fnc
 						pop		rsi
 						pop		rcx
 						pop		rdx
-						cmp		eax, 0
+						cmp		eax, 0 				;проверяем 32 бита (rax -> 64)
 						je		.delete_elem
 						mov		r10, r9				; r10 = *list
 						mov		r9, [r9 + 8]		; r9 = *next
@@ -46,8 +46,8 @@ _ft_list_remove_if:		; rdi = **list rsi = *data_ref rdx = *cmp rcx = *free_fnc
 						mov		[r10 + 8], rax		; prev->next = list->next
 
 .free:
-						mov		rdi, r9				;
-						mov		r9, [r9 + 8]
+						mov		rdi, r9				;list
+						mov		r9, [r9 + 8]		;next
 						push	rdx
 						push	rcx
 						push	rsi
@@ -64,7 +64,7 @@ _ft_list_remove_if:		; rdi = **list rsi = *data_ref rdx = *cmp rcx = *free_fnc
 						jmp		.loop
 
 .first_elem:
-						mov		rax, [r9 + 8]
+						mov		rax, [r9 + 8]		;rax -> list -> next
 						mov		[r8], rax			; *begin = list->next
 						jmp		.free
 
