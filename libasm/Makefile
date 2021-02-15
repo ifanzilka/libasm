@@ -66,10 +66,12 @@ bonus:	$(OBJ_DIR) $(NAME) $(NAME_BONUS)
 $(NAME): $(SRCS.O)
 	@echo "$(F_BLUE)Standart PART! $(F_NONE)"
 	$(AR) $(NAME) $(SRCS.O)
+	@echo "$(F_YELLOW)libasm compile! $(F_NONE)"
 
 $(NAME_BONUS):  $(BONUS_SRCS.O) $(SRCS.O)
 	@echo "$(F_BLUE)Bonus PART! $(F_NONE)"
 	$(AR) $(NAME) $(SRCS.O) $(BONUS_SRCS.O)
+	@echo "$(F_YELLOW)libasm compile! $(F_NONE)"
 
 
 $(SRCS.O): $(OBJ_DIR)%.o:%.s 
